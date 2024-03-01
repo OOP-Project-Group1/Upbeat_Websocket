@@ -2,17 +2,29 @@ package com.example.Upbeat_websocket.Model.UPBEAT;
 
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.nio.file.Path;
 
 public class Player {
-    public static Player[] instance = new Player[1];
-    public static Player getInstance(int p,String name){
-        if(instance[p]==null){
-            instance[p] = new Player(name);
+    @Setter
+    public static int turn;
+
+    public static Player[] instance = new Player[4];
+    public static Player[] getInstance(){
+        if(instance[0]==null){
+            instance[0] = new Player("1");
+            instance[1] = new Player("2");
+            instance[2] = new Player("3");
+            instance[3] = new Player("4");
         }
+        return instance;
+    }
+    public static Player getInstanceP(int p){
         return instance[p];
     }
+
+    public static
     String name;
     @Getter
     long budget;
@@ -85,6 +97,7 @@ public class Player {
                     this.budget -= 1;
                 } else {
                     this.budget -= investmentAmount;
+
                     location.getInvest(investmentAmount - 1);
                 }
                 //set new owner

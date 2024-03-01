@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.text.ParseException;
 
 public class WriteFile {
-    public void Read(String text , Path outputPath) throws IOException {
+    public void Write(String text , Path outputPath) throws IOException {
         if (!Files.isWritable(outputPath)) {
         throw new IOException("Output file is not writable: " + outputPath);
     }

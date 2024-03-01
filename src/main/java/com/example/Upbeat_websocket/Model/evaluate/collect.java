@@ -4,15 +4,15 @@ import com.example.Upbeat_websocket.Model.UPBEAT.Player;
 
 import java.util.Map;
 
-public class move implements Expr{
-    String direction;
-    public move(String direction){
-        this.direction = direction;
+public class collect implements Expr{
+    int amount;
+    public collect(int amount){
+        this.amount = amount;
     }
     @Override
     public long eval(Map<String, Long> bindings) throws EvalError {
         Player p = Player.getInstanceP(Player.turn);
-        p.move(direction);
+        p.collect(amount);
         return 0;
     }
 

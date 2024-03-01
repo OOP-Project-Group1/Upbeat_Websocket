@@ -18,7 +18,6 @@ import java.text.ParseException;
 
 @Controller
 public class ChatController {
-
     //localhost/app/chat.addUser
     @MessageMapping("/chat.addUser") //Map url
     @SendTo("/topic/public")
@@ -26,11 +25,19 @@ public class ChatController {
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
         int value = ChatMessage.increaseCount();
         chatMessage.setValue(value);
-        Path file = Paths.get("src\\main\\java\\com\\example\\Upbeat_websocket\\Model\\configuration_file\\Configuration_file.txt");
-        Player y = Player.getInstance(0,chatMessage.getSender());
-        UpbeatGame a = new UpbeatGame(file,Player.instance);
-       chatMessage.setPlayer(y);
-       chatMessage.setBudget();
+        if(chatMessage.getActive_Count() == 1){
+            chatMessage.setRole("HOST");
+        }else{
+            chatMessage.setRole("PLAYER");
+        }
+        Player y = Player.getInstanceP(value-1);
+        UpbeatGame a = UpbeatGame.getInstance();
+        chatMessage.setPlayer(y);
+        chatMessage.setBudget();
+        chatMessage.setMax_deposit(a.getMaxDep());
+        chatMessage.setMN(a.getM(),a.getN());
+        chatMessage.setNumber(value);
+        System.out.println("Value : "+value);
         return chatMessage;
     }
     @MessageMapping("/chat.sendMessage") //Map url
@@ -38,18 +45,29 @@ public class ChatController {
     public ChatMessage sendMessage(ChatMessage chatMessage) throws IOException, EvalError, ParseException {
         WriteFile wf = new WriteFile();
         Path output = Paths.get("src\\main\\java\\com\\example\\Upbeat_websocket\\Model\\output.txt");
-        wf.Read(chatMessage.getContent(),output);
-        System.out.println(chatMessage.getActive_Count());
-
+        wf.Write(chatMessage.getContent(),output);
+//        System.out.println(chatMessage.getActive_Count());
+        int p = chatMessage.getNumber();
+        //String pl = chatMessage.getSender();
         Runner runner = new Runner();
-        Player y = Player.getInstance(0,"Yai");
+        System.out.println("P : "+p);
+        Player.setTurn(p-1);
+        Player y = Player.getInstanceP(p-1);
+
         Path result = Paths.get("src\\main\\java\\com\\example\\Upbeat_websocket\\Model\\constructor_plan\\Constructor_output.txt");
         y.printLocation();
         runner.Read(output,result);
         y.printLocation();
         chatMessage.setPlayer(y);
         chatMessage.setBudget();
-        chatMessage.setType(MessageType.JOIN);
+        chatMessage.setType(MessageType.CHAT);
+        return chatMessage;
+    }
+
+    @MessageMapping("game.start")
+    @SendTo("/topic/public")
+    public ChatMessage GameStart(ChatMessage chatMessage){
+        chatMessage.setGameStart();
         return chatMessage;
     }
 }

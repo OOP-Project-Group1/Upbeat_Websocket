@@ -68,10 +68,12 @@ public class Parser {
             parseExpression();
         }else if(match(TokenType.INVEST)){
             System.out.println("Invest");
-            parseExpression();
+            ex = new invest((int) parseExpression().eval(bindings));
+            ex.eval(bindings);
         }else if(match(TokenType.COLLECT)){
             System.out.println("Collect");
-            parseExpression();
+            ex = new collect((int) parseExpression().eval(bindings));
+            ex.eval(bindings);
         }else if(match(TokenType.IF)){
             System.out.println("if");
             parseIfStatement();
@@ -256,12 +258,16 @@ public class Parser {
 
     private Expr parsePower() throws ParseException, EvalError {
         Expr power = null;
+        Expr ex = null;
         if(match(TokenType.NUMBER)){  
             System.out.println("Number");   
             power = new IntLit(Long.parseLong(tokens.get(index-1).getValue()));
         }else if(match(TokenType.IDENTIFIER)){
             if(tokens.get(index-1).getValue().equals("opponent")){
                 System.out.println("opponent");
+                ex = new opponent();
+                ex.eval(bindings);
+                //return ex;
                 power = new IntLit(call(tokens.get(index-1).getValue()));
             }else if(tokens.get(index-1).getValue().equals("nearby")){
                 System.out.println("nearby");
