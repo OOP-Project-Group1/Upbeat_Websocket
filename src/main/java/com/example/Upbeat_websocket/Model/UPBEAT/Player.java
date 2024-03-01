@@ -97,6 +97,7 @@ public class Player {
                     this.budget -= 1;
                 } else {
                     this.budget -= investmentAmount;
+
                     location.getInvest(investmentAmount - 1);
                 }
                 //set new owner

@@ -1,0 +1,18 @@
+package com.example.Upbeat_websocket.Model.evaluate;
+
+import com.example.Upbeat_websocket.Model.UPBEAT.Player;
+
+import java.util.Map;
+
+public class opponent implements Expr{
+    @Override
+    public long eval(Map<String, Long> bindings) throws EvalError {
+        Player p = Player.getInstanceP(Player.turn);
+        return p.opponent();
+    }
+
+    @Override
+    public Long call(Map<String, Long> bindings, String variable) throws EvalError {
+        return null;
+    }
+}
