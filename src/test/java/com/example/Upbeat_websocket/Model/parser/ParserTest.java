@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ParserTest {
     @Test
     public void moveTest() throws EvalError, ParseException {
-        Player y = Player.getInstance(0,"Yai");
+        Player y = Player.getInstanceP(Player.turn);
         String input = "move up";
         List<Token> tkz = Lexer.tokenize(input);
         //move eval instance for [0]

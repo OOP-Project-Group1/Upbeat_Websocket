@@ -19,6 +19,9 @@ public class ChatMessage { //Chat Format
     private MessageType type;
     @Setter
     Player player;
+    @Setter
+    @Getter
+    int number;
     private String role;
     private boolean gameStart;
     int budget;
@@ -50,7 +53,9 @@ public class ChatMessage { //Chat Format
     public void setType(MessageType t){
         this.type = t;
     }
+
     public static int ConnectedCount = 0;
+    @Getter
     private int Active_Count = 0;
 
     public static int increaseCount(){

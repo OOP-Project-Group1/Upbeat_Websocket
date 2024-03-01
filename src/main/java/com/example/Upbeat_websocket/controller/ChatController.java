@@ -30,13 +30,14 @@ public class ChatController {
         }else{
             chatMessage.setRole("PLAYER");
         }
-        Path file = Paths.get("src\\main\\java\\com\\example\\Upbeat_websocket\\Model\\configuration_file\\Configuration_file.txt");
-        Player y = Player.getInstance(0,chatMessage.getSender());
-        UpbeatGame a = new UpbeatGame(file,Player.instance);
+        Player y = Player.getInstanceP(value-1);
+        UpbeatGame a = UpbeatGame.getInstance();
         chatMessage.setPlayer(y);
         chatMessage.setBudget();
         chatMessage.setMax_deposit(a.getMaxDep());
         chatMessage.setMN(a.getM(),a.getN());
+        chatMessage.setNumber(value);
+        System.out.println("Value : "+value);
         return chatMessage;
     }
     @MessageMapping("/chat.sendMessage") //Map url
@@ -45,10 +46,14 @@ public class ChatController {
         WriteFile wf = new WriteFile();
         Path output = Paths.get("src\\main\\java\\com\\example\\Upbeat_websocket\\Model\\output.txt");
         wf.Write(chatMessage.getContent(),output);
-        System.out.println(chatMessage.getActive_Count());
-
+//        System.out.println(chatMessage.getActive_Count());
+        int p = chatMessage.getNumber();
+        //String pl = chatMessage.getSender();
         Runner runner = new Runner();
-        Player y = Player.getInstance(0,"Yai");
+        System.out.println("P : "+p);
+        Player.setTurn(p-1);
+        Player y = Player.getInstanceP(p-1);
+
         Path result = Paths.get("src\\main\\java\\com\\example\\Upbeat_websocket\\Model\\constructor_plan\\Constructor_output.txt");
         y.printLocation();
         runner.Read(output,result);

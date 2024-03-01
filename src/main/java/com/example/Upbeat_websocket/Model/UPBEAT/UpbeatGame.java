@@ -9,6 +9,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -32,13 +33,15 @@ public class UpbeatGame {
     public UpbeatGame(Path file , Player[] players){
         setup(file,players);
     }
-    //    private static UpbeatGame instance;
-//    public static UpbeatGame getInstance(){
-//        if(instance==null){
-//            instance = new UpbeatGame(file, players);
-//        }
-//        return instance;
-//    }
+    private static UpbeatGame instance;
+    public static UpbeatGame getInstance(){
+        if(instance==null){
+            Path file = Paths.get("src\\main\\java\\com\\example\\Upbeat_websocket\\Model\\configuration_file\\Configuration_file.txt");
+            Player[] players = Player.getInstance();
+            instance = new UpbeatGame(file, players);
+        }
+        return instance;
+    }
     public Region getRegion(int i,int j){
         return map[i][j];
     }
