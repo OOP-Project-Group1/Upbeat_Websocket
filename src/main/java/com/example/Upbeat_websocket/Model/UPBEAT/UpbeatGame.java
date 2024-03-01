@@ -1,5 +1,7 @@
 package com.example.Upbeat_websocket.Model.UPBEAT;
 
+import lombok.Getter;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,7 +12,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
+@Getter
 public class UpbeatGame {
     int m;
     int n;

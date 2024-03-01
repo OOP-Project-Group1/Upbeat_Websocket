@@ -1,4 +1,6 @@
 Token{type : MOVE, value : 'move'}
-Token{type : DIRECTION, value : 'upright'}
+Token{type : DIRECTION, value : 'up'}
+Token{type : LINE_TERMINAL, value : '
+'}
 Token{type : LINE_TERMINAL, value : '
 '}
