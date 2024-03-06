@@ -58,14 +58,16 @@ public class Parser {
             System.out.println("Done");
         }else if(match(TokenType.RELOCATE)){
             System.out.println("Relocate");
+            ex = new Relocate();
+            ex.eval(bindings);
         }else if(match(TokenType.MOVE)){
             System.out.println("Move");
             ex = new move(parseDirection());
             ex.eval(bindings);
         }else if(match(TokenType.SHOOT)){
             System.out.println("SHOOT");
-            parseDirection();
-            parseExpression();
+            ex = new Shoot(parseDirection(),(int) parseExpression().eval(bindings));
+            ex.eval(bindings);
         }else if(match(TokenType.INVEST)){
             System.out.println("Invest");
             ex = new invest((int) parseExpression().eval(bindings));
@@ -265,13 +267,10 @@ public class Parser {
         }else if(match(TokenType.IDENTIFIER)){
             if(tokens.get(index-1).getValue().equals("opponent")){
                 System.out.println("opponent");
-                ex = new opponent();
-                ex.eval(bindings);
-                //return ex;
-                power = new IntLit(call(tokens.get(index-1).getValue()));
+                power = new opponent();
             }else if(tokens.get(index-1).getValue().equals("nearby")){
                 System.out.println("nearby");
-                parseInfoExpression();
+                power = new Nearby(parseInfoExpression());
             }else{
                 System.out.println("Identifier");
                 power = new IntLit(call(tokens.get(index-1).getValue()));
@@ -290,9 +289,9 @@ public class Parser {
         return power;
     }
 
-    private void parseInfoExpression() throws ParseException{
+    private String parseInfoExpression() throws ParseException{
         if(match(TokenType.DIRECTION)){
-            parseDirection();
+            return parseDirection();
         }else{
             throw new ParseException("Expected direction, found "+tokens.get(index).getValue(),index);
         }

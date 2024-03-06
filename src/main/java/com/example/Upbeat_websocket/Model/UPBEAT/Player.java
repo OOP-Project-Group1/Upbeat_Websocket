@@ -97,10 +97,10 @@ public class Player {
                     this.budget -= 1;
                 } else {
                     this.budget -= investmentAmount;
-
                     location.getInvest(investmentAmount - 1);
+                    occupyRegion(location); //set new owner
                 }
-                //set new owner
+
             }//throw no budget
         }
         //throw cannot invest
@@ -114,6 +114,13 @@ public class Player {
                     location.down.owner == this ||
                     location.downLeft.owner == this ||
                     location.downRight.owner == this;
+    }
+    private void occupyRegion(Region region){
+        if(region.owner==null){
+            region.owner = this;
+            territories[region.row][region.col] = region;
+        }
+        //throw have owner
     }
 
     /**
@@ -312,7 +319,6 @@ public class Player {
                 case "downleft" -> destination = location.downLeft;
                 case "upleft" -> destination = location.topLeft;
                 default -> destination = null;
-
             }
             if(destination==null){
                 //throw no region to move
@@ -321,7 +327,6 @@ public class Player {
             }else{
                 //thorw enemy area
             }
-
         }
         //throw no money
         done();
@@ -374,15 +379,11 @@ public class Player {
                         destination.owner=null;
                     }
                 }
-
-
             }
-
-
-
-        }else{
-            //throw no money (no op)
         }
+//        else{
+//            //throw no money (no op)
+//        }
     }
     private void loseGame(){}
 
