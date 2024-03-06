@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class UpbeatWebsocketApplication {
 
 	public static void main(String[] args) {
-
 		UpbeatGame.getInstance();
 		SpringApplication.run(UpbeatWebsocketApplication.class, args);
 	}
