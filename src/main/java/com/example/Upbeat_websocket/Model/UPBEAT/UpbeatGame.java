@@ -161,7 +161,6 @@ public class UpbeatGame {
             player.center.owner=player;
             player.territories = new Region[this.m][this.n];
             player.territories[player.center.row][player.center.col]=player.center;
-            player.devisePlan((int) (planMin*60+planSec)); //golf
             player.location=player.center;
         }
     }
@@ -238,8 +237,5 @@ public class UpbeatGame {
                 }
             }
         }
-        player.revisePlan((int) (revMin*60 + revSec)); //golf
-        player.doConstructionPlan();
     }
-
 }

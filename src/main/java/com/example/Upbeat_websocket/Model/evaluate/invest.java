@@ -12,7 +12,7 @@ public class invest implements Expr{
     @Override
     public long eval(Map<String, Long> bindings) throws EvalError {
         Player p = Player.getInstanceP(Player.turn);
-        p.invest(amount);
+        if(p.myTurn) p.invest(amount);
         return 0;
     }
 

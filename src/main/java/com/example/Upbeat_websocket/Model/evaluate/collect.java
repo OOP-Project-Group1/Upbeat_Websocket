@@ -12,7 +12,7 @@ public class collect implements Expr{
     @Override
     public long eval(Map<String, Long> bindings) throws EvalError {
         Player p = Player.getInstanceP(Player.turn);
-        p.collect(amount);
+        if(p.myTurn) p.collect(amount);
         return 0;
     }
 

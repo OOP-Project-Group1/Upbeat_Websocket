@@ -56,6 +56,8 @@ public class Parser {
             parseAssignStatement();
         }else if(match(TokenType.DONE)){
             System.out.println("Done");
+            ex = new Done();
+            ex.eval(bindings);
         }else if(match(TokenType.RELOCATE)){
             System.out.println("Relocate");
             ex = new Relocate();

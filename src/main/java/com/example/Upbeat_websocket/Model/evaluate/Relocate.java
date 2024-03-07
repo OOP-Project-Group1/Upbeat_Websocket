@@ -8,7 +8,7 @@ public class Relocate implements Expr{
     @Override
     public long eval(Map<String, Long> bindings) throws EvalError {
         Player p = Player.getInstanceP(Player.turn);
-        p.relocate();
+        if(p.myTurn) p.relocate();
         return 0;
     }
 

@@ -12,7 +12,7 @@ public class move implements Expr{
     @Override
     public long eval(Map<String, Long> bindings) throws EvalError {
         Player p = Player.getInstanceP(Player.turn);
-        p.move(direction);
+        if(p.myTurn) p.move(direction);
         return 0;
     }
 
