@@ -45,6 +45,7 @@ public class UpbeatGame {
     public Region getRegion(int i,int j){
         return map[i][j];
     }
+    public Region[][] getAllRegion(){ return map; }
 
     /**
      * read configuration
@@ -113,7 +114,6 @@ public class UpbeatGame {
                     if(i-1>=0) map[i][j].top = map[i-1][j];
                     if(i+1<m) map[i][j].down = map[i+1][j];
 
-
                     //if col is odd , left up row is the same
                     //if col is even , left up will -1 row
                     if(j%2==1 && j-1>=0 && i-1>=0 ) map[i][j].topLeft = map[i-1][j-1];
@@ -135,11 +135,7 @@ public class UpbeatGame {
                     if(j+1<n && j%2==1) map[i][j].downRight = map[i][j+1];
                 }
             }
-
-
             setUpPlayer(players);
-//                findFirstPlayer(players);
-//                turnRunner(players);
 
         }catch (NullPointerException e){
             System.out.println("No players");

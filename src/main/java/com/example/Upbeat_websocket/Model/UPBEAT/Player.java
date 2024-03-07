@@ -20,9 +20,12 @@ public class Player {
         }
         return instance;
     }
-    public static Player getInstanceP(int p){
+//    public static Player getInstanceP(int p){
+//        return instance[p];
+//    }
+public static Player getInstanceP(int p){
         return instance[p];
-    }
+}
 
     public static
     String name;
@@ -38,6 +41,13 @@ public class Player {
     public int locationGet(){
         String x =  String.valueOf(location.getRow());
         String y =  String.valueOf(location.getCol());
+        String sum = x+y;
+        return Integer.parseInt(sum);
+    }
+
+    public int centerGet(){
+        String x =  String.valueOf(center.getRow());
+        String y =  String.valueOf(center.getCol());
         String sum = x+y;
         return Integer.parseInt(sum);
     }
@@ -97,7 +107,7 @@ public class Player {
                     this.budget -= 1;
                 } else {
                     this.budget -= investmentAmount;
-
+                    location.setOwner(this);
                     location.getInvest(investmentAmount - 1);
                 }
                 //set new owner

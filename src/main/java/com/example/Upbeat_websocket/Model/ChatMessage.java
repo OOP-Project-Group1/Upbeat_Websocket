@@ -11,17 +11,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Getter
+@Setter
 @Builder
 public class ChatMessage { //Chat Format
     private String content;
     private String timestamp;
     private String sender;
     private MessageType type;
-    @Setter
     Player player;
-    @Setter
-    @Getter
-    int number;
+    int id;
+    int center;
     private String role;
     private boolean gameStart;
     int budget;
@@ -29,7 +28,13 @@ public class ChatMessage { //Chat Format
     int m;
     int n;
     long max_deposit;
-
+    long Interest_rate;
+    long PlanMin;
+    long PlanSec;
+    long revMin;
+    long revSec;
+    long revCost;
+    public Region[][] map;
     public void setGameStart(){
         gameStart = true;
     }
@@ -49,6 +54,7 @@ public class ChatMessage { //Chat Format
     public void setBudget(){
         budget = (int) player.getBudget();
         location = player.locationGet();
+        center = player.centerGet();
     }
     public void setType(MessageType t){
         this.type = t;

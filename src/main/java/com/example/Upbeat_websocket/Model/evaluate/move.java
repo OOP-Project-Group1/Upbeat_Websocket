@@ -11,6 +11,7 @@ public class move implements Expr{
     }
     @Override
     public long eval(Map<String, Long> bindings) throws EvalError {
+        System.out.println("Player Turn's: "+Player.turn);
         Player p = Player.getInstanceP(Player.turn);
         p.move(direction);
         return 0;

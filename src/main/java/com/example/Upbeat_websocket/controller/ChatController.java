@@ -34,9 +34,17 @@ public class ChatController {
         UpbeatGame a = UpbeatGame.getInstance();
         chatMessage.setPlayer(y);
         chatMessage.setBudget();
+        chatMessage.setInterest_rate(a.getInterestPct());
+        chatMessage.setPlanMin(a.getPlanMin());
+        chatMessage.setPlanSec(a.getPlanSec());
+        chatMessage.setRevMin(a.getRevMin());
+        chatMessage.setRevSec(a.getRevSec());
+        chatMessage.setRevCost(a.getRevCost());
+//        chatMessage.setMap(a.getAllRegion());
         chatMessage.setMax_deposit(a.getMaxDep());
         chatMessage.setMN(a.getM(),a.getN());
-        chatMessage.setNumber(value);
+        chatMessage.setId(value);
+        System.out.println(chatMessage.getId());
         System.out.println("Value : "+value);
         return chatMessage;
     }
@@ -46,14 +54,11 @@ public class ChatController {
         WriteFile wf = new WriteFile();
         Path output = Paths.get("src\\main\\java\\com\\example\\Upbeat_websocket\\Model\\output.txt");
         wf.Write(chatMessage.getContent(),output);
-//        System.out.println(chatMessage.getActive_Count());
-        int p = chatMessage.getNumber();
-        //String pl = chatMessage.getSender();
+        int p = chatMessage.getId();
         Runner runner = new Runner();
         System.out.println("P : "+p);
         Player.setTurn(p-1);
         Player y = Player.getInstanceP(p-1);
-
         Path result = Paths.get("src\\main\\java\\com\\example\\Upbeat_websocket\\Model\\constructor_plan\\Constructor_output.txt");
         y.printLocation();
         runner.Read(output,result);

@@ -1,10 +1,10 @@
 m=8
 n=8
-init_plan_min=5
-init_plan_sec=0
+init_plan_min=4
+init_plan_sec=30
 init_budget=10000
 init_center_dep=100
-plan_rev_min=30
+plan_rev_min=3
 plan_rev_sec=0
 rev_cost=100
 max_dep=5000

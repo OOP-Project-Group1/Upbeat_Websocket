@@ -1,11 +1,13 @@
 package com.example.Upbeat_websocket.Model.UPBEAT;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
 public class Region {
     long deposit;
+    @Setter
     Player owner;
     @Getter
     int row;

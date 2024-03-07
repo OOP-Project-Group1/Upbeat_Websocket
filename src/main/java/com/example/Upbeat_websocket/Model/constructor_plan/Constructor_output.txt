@@ -1,26 +1,4 @@
-Token{type : IDENTIFIER, value : 'i'}
-Token{type : ASSIGNMENT, value : '='}
-Token{type : NUMBER, value : '2'}
-Token{type : LINE_TERMINAL, value : '
-'}
-Token{type : WHILE, value : 'while'}
-Token{type : LEFT_PARENTHESIS, value : '('}
-Token{type : IDENTIFIER, value : 'i'}
-Token{type : RIGHT_PARENTHESIS, value : ')'}
-Token{type : LEFT_CURLY_BRACKET, value : '{'}
-Token{type : LINE_TERMINAL, value : '
-'}
 Token{type : MOVE, value : 'move'}
-Token{type : DIRECTION, value : 'up'}
-Token{type : LINE_TERMINAL, value : '
-'}
-Token{type : IDENTIFIER, value : 'i'}
-Token{type : ASSIGNMENT, value : '='}
-Token{type : IDENTIFIER, value : 'i'}
-Token{type : MINUS, value : '-'}
-Token{type : NUMBER, value : '1'}
-Token{type : LINE_TERMINAL, value : '
-'}
-Token{type : RIGHT_CURLY_BRACKET, value : '}'}
+Token{type : DIRECTION, value : 'down'}
 Token{type : LINE_TERMINAL, value : '
 '}
