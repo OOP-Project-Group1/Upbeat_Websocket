@@ -9,6 +9,8 @@ import java.nio.file.Path;
 public class Player {
     @Setter
     public static int turn;
+    @Setter
+    public boolean myTurn = false;
 
     public static Player[] instance = new Player[4];
     public static Player[] getInstance(){
@@ -23,8 +25,6 @@ public class Player {
     public static Player getInstanceP(int p){
         return instance[p];
     }
-
-    public static
     String name;
     @Getter
     long budget;
@@ -35,49 +35,27 @@ public class Player {
     public Player(String name){
         this.name = name;
     }
-    public int locationGet(){
-        String x =  String.valueOf(location.getRow());
-        String y =  String.valueOf(location.getCol());
-        String sum = x+y;
-        return Integer.parseInt(sum);
-    }
-    public void revisePlan(int timeLimit){
-
-    }
-
-    public void devisePlan(int timeLimit){
-        constructionPlan=null;
-    }
-    public void showStat(){
-        System.out.println("Budget : " + budget);
-        System.out.print("Location -> ");
-        location.print();
-        System.out.print("Center -> ");
-        center.print();
-        System.out.println("Territories -> ");
-        for(Region[] row : territories){
-            for(Region t : row){
-                if(t!=null){
-                    t.print();
+    private void loseGame(){
+        center = null;
+        location = null;
+        budget = 0;
+        for (Region[] row : territories) {
+            for (Region t : row) {
+                if (t != null) {
+                    t.owner = null;
                 }
             }
         }
-    }
-    public void printLocation(){
-        System.out.println("Budget : " + budget);
-        System.out.print("Location -> ");
-        location.print();
-    }
-    public void doConstructionPlan(){
 
     }
+
 
     /**
      * Once executed, the evaluation of the construction plan in that turn ends. This is similar to the
      * return statement in a procedure.
      */
     public void done(){
-        //
+        myTurn = false;
     }
 
     /**
@@ -90,20 +68,25 @@ public class Player {
      * region belonging to the player.
      */
     public void invest(int investmentAmount){
+        if(center == null){
+            System.out.println("You lose!");
+            return;
+        }
         if(canInvest()){
             investmentAmount+=1;
             if(budget>=1) {
                 if (this.budget < investmentAmount) {
                     this.budget -= 1;
+                    System.out.println("Not enough budget");
                 } else {
                     this.budget -= investmentAmount;
-
                     location.getInvest(investmentAmount - 1);
+                    occupyRegion(location);
                 }
-                //set new owner
-            }//throw no budget
+            }
+            System.out.println("You have 0 budget");
         }
-        //throw cannot invest
+        System.out.println("Enemy's area");
     }
     private boolean canInvest(){
         if(location.owner==this) return true;
@@ -114,6 +97,14 @@ public class Player {
                     location.down.owner == this ||
                     location.downLeft.owner == this ||
                     location.downRight.owner == this;
+    }
+    private void occupyRegion(Region region){
+        if(region.owner==null){
+            region.owner = this;
+            territories[region.row][region.col] = region;
+        }else{
+            System.out.println("Enemy's region");
+        }
     }
 
     /**
@@ -128,19 +119,33 @@ public class Player {
      * @param amount
      */
     public void collect(int amount){
+        if(center == null){
+            System.out.println("You lose!");
+            return;
+        }
         if(this.budget>=1){
             budget-=1;
             if(this.location.owner==this) {
                 if (amount <= location.deposit) {
                     location.deposit -= amount;
                     this.budget += amount;
+                    if(this.location.deposit==0){
+                        loseRegion(location);
+                    }
                 }
-                if(this.location.deposit==0){
-                    location.owner=null;
-                }
-            }//throw not occupy
-
-        }//throw no budget | call done
+            }else{
+                System.out.println("Not your region");
+            }
+        }else{
+            done();
+        }
+    }
+    private void loseRegion(Region region){
+        region.owner = null;
+        territories[region.row][region.col] = null;
+        if(region==center){
+            loseGame();
+        }
     }
     /**
      * Find closet opponent region , The value of each location is relative to the city crew. The unit digit is between 1 and 6, and
@@ -148,6 +153,10 @@ public class Player {
      * @return number that identified closet opponent's region
      */
     public int opponent(){
+        if(center==null){
+            System.out.println("You lose!");
+            return 0;
+        }
         Region up=location;
         Region dow=location;
         Region upRight=location;
@@ -199,6 +208,10 @@ public class Player {
      * If no opponent owns a region in the given direction, the nearby function should return 0.
      */
     public int nearby(String direction){
+        if(center==null){
+            System.out.println("You lose!");
+            return 0;
+        }
         int x=1;
         long y;
         if(direction.equals("up")){
@@ -279,18 +292,27 @@ public class Player {
      * executed (regardless of the outcome), the evaluation of the construction plan in that turn ends.
      */
     public void relocate(){
-        if(location!=center){
-            int minimumMove = location.findMinimumMove(center);
-            int cost = 5*minimumMove+10;
-            if(budget>=cost){
-                budget-=cost;
-                center=location;
-                //end call done
+        if(center==null){
+            System.out.println("You lose!");
+            return;
+        }
+        if(location.owner!=this){
+            if(location!=center){
+                int minimumMove = location.findMinimumMove(center);
+                int cost = 5*minimumMove+10;
+                if(budget>=cost){
+                    budget-=cost;
+                    center=location;
+                }else{
+                    System.out.println("Not enough budget");
+                }
             }else{
-                //throw no budgett
+                System.out.println("It's your center");
             }
-        }//throw already center
-
+        }else{
+            System.out.println("Not your region");
+        }
+    done();
     }
 
     /**
@@ -301,6 +323,10 @@ public class Player {
      * in that turn ends.
      */
     public void move(String direction){
+        if(center==null){
+            System.out.println("You lose!");
+            return;
+        }
         Region destination;
         if(budget>=1) {
             budget -= 1;
@@ -315,16 +341,15 @@ public class Player {
 
             }
             if(destination==null){
-                //throw no region to move
+                System.out.println("No area in that direction");
             }else if(destination.owner==null || destination.owner==this){
                 location=destination;
             }else{
-                //thorw enemy area
+                System.out.println("Enemy region!");
             }
-
+        }else{
+            done();
         }
-        //throw no money
-        done();
     }
     /**
      * The shoot command attempts to attack a region located one unit away from the city crew in the
@@ -349,6 +374,10 @@ public class Player {
      * Ownerless deposits will not accrue interests.
      */
     public void shoot(String direction, int cost){
+        if(center==null){
+            System.out.println("You lose!");
+            return;
+        }
         Region destination;
         if(budget>=cost+1){
             budget-=cost+1;
@@ -362,30 +391,61 @@ public class Player {
                 default -> destination = null;
             }
             if(destination!=null){
-                if(destination.owner==null){
-
-                }else{
+                if(destination.owner!=null){
                     destination.deposit-=cost;
                     if(destination.deposit<1){
-                        if(destination.owner.center==destination){
-                            destination.owner.loseGame();
-                        }
                         destination.deposit=0;
-                        destination.owner=null;
+                        Player p = destination.owner;
+                        p.loseRegion(destination);
                     }
                 }
-
-
+                //If the target region is unoccupied, the player still pays the cost of the attack, but the attack itself will have no effects otherwise.
+            }else{
+                System.out.println("No region in that direction");
             }
 
 
 
         }else{
-            //throw no money (no op)
+            System.out.println("No budget");
         }
     }
-    private void loseGame(){}
+    //For test
+    public int locationGet(){
+        if(location==null) return 999;
+        String x =  String.valueOf(location.getRow());
+        String y =  String.valueOf(location.getCol());
+        String sum = x+y;
+        return Integer.parseInt(sum);
+    }
+    public void showStat(){
+        if(center==null){
+            System.out.println("You lose!");
+        }else {
+            System.out.println("Budget : " + budget);
+            System.out.print("Location -> ");
+            location.print();
+            System.out.print("Center -> ");
+            center.print();
+            System.out.println("Territories -> ");
+            for (Region[] row : territories) {
+                for (Region t : row) {
+                    if (t != null) {
+                        t.print();
+                    }
+                }
+            }
+        }
+    }
+    public void printLocation(){
+        if(center==null){
+            System.out.println("You lose!");
+        }else{
+            System.out.println("Budget : " + budget);
+            System.out.print("Location -> ");
+            location.print();
+        }
 
-
+    }
 
 }

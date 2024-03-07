@@ -54,6 +54,7 @@ public class ChatController {
         Player.setTurn(p-1);
         Player y = Player.getInstanceP(p-1);
 
+        y.setMyTurn(true);
         Path result = Paths.get("src\\main\\java\\com\\example\\Upbeat_websocket\\Model\\constructor_plan\\Constructor_output.txt");
         y.printLocation();
         runner.Read(output,result);

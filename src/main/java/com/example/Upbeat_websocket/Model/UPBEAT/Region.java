@@ -21,7 +21,6 @@ public class Region {
     int hashcode=hashCode();
     public void getInvest(int amount){
         this.deposit+=amount;
-
         if(this.deposit>maxDeposit){
             this.deposit = maxDeposit;
         }
