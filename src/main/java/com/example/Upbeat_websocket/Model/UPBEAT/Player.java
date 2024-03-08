@@ -7,8 +7,9 @@ import lombok.Setter;
 import java.nio.file.Path;
 
 public class Player {
-    @Setter
+
     public static int turn;
+    public int currentTurn;
     @Setter
     public boolean myTurn = false;
 
@@ -410,6 +411,18 @@ public class Player {
             System.out.println("No budget");
         }
     }
+
+    public int centerGet(){
+        if(center != null){
+            String x = String.valueOf(center.getRow());
+            String y = String.valueOf(center.getCol());
+            String sum = x+y;
+            return Integer.parseInt(sum);
+        }else{
+            return 999;
+        }
+    }
+
     //For test
     public int locationGet(){
         if(location==null) return 999;
@@ -445,7 +458,13 @@ public class Player {
             System.out.print("Location -> ");
             location.print();
         }
-
     }
 
+    public static void setTurn(int turn){
+        Player.turn = turn;
+    }
+
+    public void setCurrentTurn(){
+        currentTurn = Player.turn;
+    }
 }

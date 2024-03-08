@@ -9,7 +9,6 @@ public class UpbeatWebsocketApplication {
 
 	public static void main(String[] args) {
 		UpbeatGame.getInstance();
-		//need to run for reset player because player created here
 		SpringApplication.run(UpbeatWebsocketApplication.class, args);
 	}
 

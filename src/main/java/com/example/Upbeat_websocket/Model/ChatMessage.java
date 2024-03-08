@@ -1,27 +1,21 @@
 package com.example.Upbeat_websocket.Model;
 
 import com.example.Upbeat_websocket.Model.UPBEAT.Player;
-import com.example.Upbeat_websocket.Model.UPBEAT.Region;
-import com.example.Upbeat_websocket.Model.UPBEAT.UpbeatGame;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 @Getter
+@Setter
 @Builder
 public class ChatMessage { //Chat Format
     private String content;
     private String timestamp;
     private String sender;
     private MessageType type;
-    @Setter
+    private int currentTurn;
     Player player;
-    @Setter
-    @Getter
-    int number;
+    int id;
     private String role;
     private boolean gameStart;
     int budget;
@@ -29,6 +23,13 @@ public class ChatMessage { //Chat Format
     int m;
     int n;
     long max_deposit;
+    int center;
+    double interest_rate;
+    int initialPlanMin;
+    int initialPlanSec;
+    int revMin;
+    int revSec;
+    int revCost;
 
     public void setGameStart(){
         gameStart = true;
@@ -49,6 +50,7 @@ public class ChatMessage { //Chat Format
     public void setBudget(){
         budget = (int) player.getBudget();
         location = player.locationGet();
+        center = player.centerGet();
     }
     public void setType(MessageType t){
         this.type = t;
@@ -66,9 +68,10 @@ public class ChatMessage { //Chat Format
         ConnectedCount = ConnectedCount - 1;
         return ConnectedCount;
     }
-
-    public int setValue(int Active_Count){
+    public void setValue(int Active_Count){
         this.Active_Count = Active_Count;
-        return Active_Count;
+    }
+    public void setCurrentTurn(int currentTurn){
+        this.currentTurn = currentTurn;
     }
 }
