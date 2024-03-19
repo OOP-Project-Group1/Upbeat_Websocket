@@ -87,15 +87,34 @@ public class ChatController {
         chatMessage.setBudget();
         chatMessage.setType(MessageType.CHAT);
 
-        //next turn , current turn (1234)  . click done -> frontend has index of next player ,start with 2
-        chatMessage.setCurrentTurn(turn%4+1);
-
         //map
         //chatMessage.convertMap(y.getTerritories());
         UpbeatGame a = UpbeatGame.getInstance();
         chatMessage.setMN(a.getM(),a.getN());
-        chatMessage.convertMap(a.map);
+        chatMessage.convertWithDepo(a.map);;
 
+
+        //next turn , current turn (1234)  . click done -> frontend has index of next player ,start with 2
+        Player[] instance = Player.getInstance();
+        for(int i = 1;i<5;i++){ // 1 2 3 4
+            turn = turn%4+1;
+            System.out.println("Turn :" + turn);
+            if(i==4){
+                y.setWinner(true);
+                chatMessage.setCurrentTurn(0);
+            }else if(!instance[turn-1].getLoser()){
+                System.out.println("I'm not loser");
+                chatMessage.setCurrentTurn(turn);
+               break;
+            }
+        }
+        int currentPlayer=0;
+        for(Player p : instance){
+            if(!p.getLoser()){
+                currentPlayer+=1;
+            }
+        }
+        chatMessage.setValue(currentPlayer);
         return chatMessage;
     }
 
@@ -103,6 +122,16 @@ public class ChatController {
     @SendTo("/topic/public")
     public ChatMessage GameStart(ChatMessage chatMessage){
         chatMessage.setGameStart();
+
+        //if not 4 players
+        int currentPlayer = ChatMessage.ConnectedCount;
+        System.out.println("Active count : "+ currentPlayer);
+        Player[] instance = Player.getInstance();
+        for(int i = currentPlayer+1;i<5;i++){ // 1 2 3 4
+            System.out.println("P "+i+" : Lose");
+            instance[i-1].loseGame();
+        }
+
         return chatMessage;
     }
 }

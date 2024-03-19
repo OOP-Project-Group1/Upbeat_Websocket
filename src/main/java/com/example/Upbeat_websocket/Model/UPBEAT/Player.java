@@ -7,6 +7,13 @@ import lombok.Setter;
 import java.nio.file.Path;
 
 public class Player {
+    //game state
+    @Getter
+    Boolean loser = false;
+    @Getter
+    @Setter
+    Boolean winner = false;
+
     @Setter
     public static int turn;
     @Setter
@@ -36,7 +43,7 @@ public class Player {
     public Player(String name){
         this.name = name;
     }
-    private void loseGame(){
+    public void loseGame(){
         center = null;
         location = null;
         budget = 0;
@@ -47,7 +54,7 @@ public class Player {
                 }
             }
         }
-
+        loser = true;
     }
 
 

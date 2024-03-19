@@ -76,10 +76,14 @@ public class ChatMessage { //Chat Format
         budget = (int) player.getBudget();
         location = player.locationGet();
         center = player.centerGet();
+        if(player.getLoser()){
+            budget = (int) 999999999;
+        }
     }
     public void setType(MessageType t){
         this.type = t;
     }
+
 
     public static int ConnectedCount = 0;
     @Getter
@@ -102,6 +106,18 @@ public class ChatMessage { //Chat Format
     // map
     @Setter
     int[][] numMap;
+    public void convertWithDepo(Region[][] map){
+        numMap = new int[m][n];
+        for(Region[] row : map){
+            for(Region region: row){
+                if(region.getOwner()==player){
+                    numMap[region.getRow()][region.getCol()] = (int) region.getDeposit();
+                }else {
+                    numMap[region.getRow()][region.getCol()] = 0;
+                }
+            }
+        }
+    }
     public void convertMap(Region[][] map){
         numMap = new int[m][n];
         for(Region[] row : map){
