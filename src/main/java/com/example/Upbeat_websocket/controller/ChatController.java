@@ -50,6 +50,7 @@ public class ChatController {
         int p = chatMessage.getNumber();
         //String pl = chatMessage.getSender();
         Runner runner = new Runner();
+
         System.out.println("P : "+p);
         Player.setTurn(p-1);
         Player y = Player.getInstanceP(p-1);
