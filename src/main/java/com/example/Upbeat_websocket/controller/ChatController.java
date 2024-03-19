@@ -39,6 +39,7 @@ public class ChatController {
         chatMessage.setNumber(value);
         System.out.println("Value : "+value);
         return chatMessage;
+
     }
     @MessageMapping("/chat.sendMessage") //Map url
     @SendTo("/topic/public")
