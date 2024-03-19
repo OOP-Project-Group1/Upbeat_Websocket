@@ -29,6 +29,7 @@ public class Player {
     @Getter
     long budget;
     Region center;
+    //@Getter
     Region[][] territories;
     Path constructionPlan;
     Region location;
@@ -415,6 +416,13 @@ public class Player {
         if(location==null) return 999;
         String x =  String.valueOf(location.getRow());
         String y =  String.valueOf(location.getCol());
+        String sum = x+y;
+        return Integer.parseInt(sum);
+    }
+    public int centerGet(){
+        if(center==null) return 999;
+        String x =  String.valueOf(center.getRow());
+        String y =  String.valueOf(center.getCol());
         String sum = x+y;
         return Integer.parseInt(sum);
     }

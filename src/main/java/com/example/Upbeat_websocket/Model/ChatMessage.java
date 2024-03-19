@@ -17,18 +17,44 @@ public class ChatMessage { //Chat Format
     private String timestamp;
     private String sender;
     private MessageType type;
-    @Setter
-    Player player;
+
+    //Game state
     @Setter
     @Getter
-    int number;
+    int id;
+    @Setter
+    @Getter
+    int currentTurn;
+//    @Setter
+//    @Getter
+//    int nextTurn;
+
+    //configuration file
+    @Setter
+    double interest_rate;
+    @Setter
+    int initialPlanMin;
+    @Setter
+    int initialPlanSec;
+    @Setter
+    int revMin;
+    @Setter
+    int revSec;
+    @Setter
+    int revCost;
+    int m;
+    int n;
+    long max_deposit;
+
+    @Setter
+    Player player;
+
+    //int number;
     private String role;
     private boolean gameStart;
     int budget;
     int location;
-    int m;
-    int n;
-    long max_deposit;
+    int center;
 
     public void setGameStart(){
         gameStart = true;
@@ -49,6 +75,7 @@ public class ChatMessage { //Chat Format
     public void setBudget(){
         budget = (int) player.getBudget();
         location = player.locationGet();
+        center = player.centerGet();
     }
     public void setType(MessageType t){
         this.type = t;
@@ -70,5 +97,27 @@ public class ChatMessage { //Chat Format
     public int setValue(int Active_Count){
         this.Active_Count = Active_Count;
         return Active_Count;
+    }
+
+    // map
+    @Setter
+    int[][] numMap;
+    public void convertMap(Region[][] map){
+        numMap = new int[m][n];
+        for(Region[] row : map){
+            for(Region region: row){
+                if(region.getOwner()==Player.getInstanceP(0)){
+                    numMap[region.getRow()][region.getCol()] = 1;
+                }else if(region.getOwner()==Player.getInstanceP(1)){
+                    numMap[region.getRow()][region.getCol()] = 2;
+                }else if(region.getOwner()==Player.getInstanceP(2)){
+                    numMap[region.getRow()][region.getCol()] = 3;
+                }else if(region.getOwner()==Player.getInstanceP(3)){
+                    numMap[region.getRow()][region.getCol()] = 4;
+                }else {
+                    numMap[region.getRow()][region.getCol()] = 0;
+                }
+            }
+        }
     }
 }

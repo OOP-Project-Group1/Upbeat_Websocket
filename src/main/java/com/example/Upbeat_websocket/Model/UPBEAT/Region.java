@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import java.util.Objects;
 
+@Getter
 public class Region {
     long deposit;
     Player owner;

@@ -36,7 +36,26 @@ public class ChatController {
         chatMessage.setBudget();
         chatMessage.setMax_deposit(a.getMaxDep());
         chatMessage.setMN(a.getM(),a.getN());
-        chatMessage.setNumber(value);
+
+        chatMessage.setId(value);
+        chatMessage.setCurrentTurn(1);
+
+        //send confi to frontend
+        chatMessage.setMax_deposit(a.getMaxDep());
+        chatMessage.setMN(a.getM(),a.getN());
+        chatMessage.setId(value);
+        chatMessage.setCurrentTurn(1);
+        chatMessage.setInitialPlanMin((int) a.getPlanMin());
+        chatMessage.setInitialPlanSec((int) a.getPlanSec());
+        chatMessage.setRevMin((int) a.getRevMin());
+        chatMessage.setRevSec((int) a.getRevSec());
+        chatMessage.setRevCost((int) a.getRevCost());
+        chatMessage.setInterest_rate(a.getInterestPct());
+
+        //map
+        //chatMessage.setNumMap(new int[5][6]);
+        chatMessage.convertMap(a.map);
+
         System.out.println("Value : "+value);
         return chatMessage;
 
@@ -48,13 +67,16 @@ public class ChatController {
         Path output = Paths.get("src\\main\\java\\com\\example\\Upbeat_websocket\\Model\\output.txt");
         wf.Write(chatMessage.getContent(),output);
 //        System.out.println(chatMessage.getActive_Count());
-        int p = chatMessage.getNumber();
-        //String pl = chatMessage.getSender();
-        Runner runner = new Runner();
+        //int p = chatMessage.getId();
 
-        System.out.println("P : "+p);
-        Player.setTurn(p-1);
-        Player y = Player.getInstanceP(p-1);
+        //String pl = chatMessage.getSender();
+
+        Runner runner = new Runner();
+        int turn = chatMessage.getId(); //get yourself index
+        System.out.println("P : "+turn);
+        Player.setTurn(turn-1); //index is 0 - 3
+        //set turn in frontend too
+        Player y = Player.getInstanceP(turn-1);
 
         y.setMyTurn(true);
         Path result = Paths.get("src\\main\\java\\com\\example\\Upbeat_websocket\\Model\\constructor_plan\\Constructor_output.txt");
@@ -64,6 +86,16 @@ public class ChatController {
         chatMessage.setPlayer(y);
         chatMessage.setBudget();
         chatMessage.setType(MessageType.CHAT);
+
+        //next turn , current turn (1234)  . click done -> frontend has index of next player ,start with 2
+        chatMessage.setCurrentTurn(turn%4+1);
+
+        //map
+        //chatMessage.convertMap(y.getTerritories());
+        UpbeatGame a = UpbeatGame.getInstance();
+        chatMessage.setMN(a.getM(),a.getN());
+        chatMessage.convertMap(a.map);
+
         return chatMessage;
     }
 
