@@ -25,9 +25,12 @@ public class ChatMessage { //Chat Format
     @Setter
     @Getter
     int currentTurn;
-//    @Setter
-//    @Getter
-//    int nextTurn;
+
+    //status
+    @Setter
+    Boolean[] winner;
+    @Setter
+    Boolean[] loser;
 
     //configuration file
     @Setter
