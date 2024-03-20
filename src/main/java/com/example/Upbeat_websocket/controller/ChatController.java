@@ -55,7 +55,7 @@ public class ChatController {
 
         //map
         //chatMessage.setNumMap(new int[5][6]);
-        chatMessage.convertMap(a.map);
+        chatMessage.convertWithDepo(a.map);
 
         System.out.println("Value : "+value);
         return chatMessage;
