@@ -51,6 +51,7 @@ public class ChatController {
         chatMessage.setRevSec((int) a.getRevSec());
         chatMessage.setRevCost((int) a.getRevCost());
         chatMessage.setInterest_rate(a.getInterestPct());
+        Player.setInterestPct((int) a.getInterestPct());
 
         //map
         //chatMessage.setNumMap(new int[5][6]);
@@ -62,59 +63,82 @@ public class ChatController {
     }
     @MessageMapping("/chat.sendMessage") //Map url
     @SendTo("/topic/public")
-    public ChatMessage sendMessage(ChatMessage chatMessage) throws IOException, EvalError, ParseException {
-        WriteFile wf = new WriteFile();
-        Path output = Paths.get("src\\main\\java\\com\\example\\Upbeat_websocket\\Model\\output.txt");
-        wf.Write(chatMessage.getContent(),output);
-//        System.out.println(chatMessage.getActive_Count());
-        //int p = chatMessage.getId();
-
-        //String pl = chatMessage.getSender();
-
-        Runner runner = new Runner();
+    public ChatMessage sendMessage(ChatMessage chatMessage) throws IOException, EvalError, ParseException { // after click done
+        //get index who click done
         int turn = chatMessage.getId(); //get yourself index
-        System.out.println("P : "+turn);
         Player.setTurn(turn-1); //index is 0 - 3
-        //set turn in frontend too
         Player y = Player.getInstanceP(turn-1);
 
-        y.setMyTurn(true);
-        Path result = Paths.get("src\\main\\java\\com\\example\\Upbeat_websocket\\Model\\constructor_plan\\Constructor_output.txt");
-        y.printLocation();
-        runner.Read(output,result);
-        y.printLocation();
+            y.setMyTurn(true);
+            y.turn();
+
+            Runner runner = new Runner();
+            //get plan
+            WriteFile wf = new WriteFile();
+            Path output = Paths.get("src\\main\\java\\com\\example\\Upbeat_websocket\\Model\\output.txt");
+            wf.Write(chatMessage.getContent(), output);
+
+            //run plan
+            Path result = Paths.get("src\\main\\java\\com\\example\\Upbeat_websocket\\Model\\constructor_plan\\Constructor_output.txt");
+            runner.Read(output,result);
+
+            y.goBack();
+
+        //send data after execute plan
         chatMessage.setPlayer(y);
         chatMessage.setBudget();
         chatMessage.setType(MessageType.CHAT);
 
-        //map
+        //send map after execute plan
         //chatMessage.convertMap(y.getTerritories());
         UpbeatGame a = UpbeatGame.getInstance();
         chatMessage.setMN(a.getM(),a.getN());
-        chatMessage.convertWithDepo(a.map);;
+        chatMessage.convertWithDepo(a.map);
 
-
-        //next turn , current turn (1234)  . click done -> frontend has index of next player ,start with 2
         Player[] instance = Player.getInstance();
-        for(int i = 1;i<5;i++){ // 1 2 3 4
-            turn = turn%4+1;
-            System.out.println("Turn :" + turn);
-            if(i==4){
-                y.setWinner(true);
-                chatMessage.setCurrentTurn(0);
-            }else if(!instance[turn-1].getLoser()){
-                System.out.println("I'm not loser");
-                chatMessage.setCurrentTurn(turn);
-               break;
+            //next turn calculate ( click done -> frontend has index of next player )
+
+            for (int i = 1; i < 5; i++) { // 1 2 3 4
+                turn = turn % 4 + 1;
+                System.out.println("Turn :" + turn);
+                if (i == 4) {
+                    y.setWinner(true);
+                    chatMessage.setCurrentTurn(0);
+                } else if (!instance[turn - 1].getLoser()) {
+                    System.out.println("I'm not loser");
+                    chatMessage.setCurrentTurn(turn);
+                    break;
+                }
+            }
+        //get number of alive player
+        int currentPlayer = 0;
+        for (Player p : instance) {
+            if (!p.getLoser()) {
+                currentPlayer += 1;
             }
         }
-        int currentPlayer=0;
-        for(Player p : instance){
-            if(!p.getLoser()){
-                currentPlayer+=1;
-            }
-        }
+
         chatMessage.setValue(currentPlayer);
+        System.out.println("active count : " + currentPlayer);
+
+
+
+
+        //send boolean of status player to frontend for update loser and winner
+        Boolean[] winners = new Boolean[4];
+        Boolean[] losers = new Boolean[4];
+        int i = 0;
+        for (Player p : instance) {
+            if (p.getLoser()) {
+                losers[i] = true;
+            }
+            if(p.getWinner()){
+                winners[i] = true;
+            }
+            i++;
+        }
+        chatMessage.setWinner(winners);
+        chatMessage.setLoser(losers);
         return chatMessage;
     }
 
@@ -131,6 +155,8 @@ public class ChatController {
             System.out.println("P "+i+" : Lose");
             instance[i-1].loseGame();
         }
+        chatMessage.setValue(currentPlayer);
+
 
         return chatMessage;
     }

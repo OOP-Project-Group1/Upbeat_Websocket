@@ -112,9 +112,11 @@ public class Region {
         if(topLeft!=null) System.out.println("TopLeft "+topLeft.row+topLeft.col);
     }
 
-    void accruesInterest(long interest){
-        this.deposit+=interest;
+    void accruesInterest(long interest,int turn){
+        double temp=interest*Math.log(deposit)*(Math.log(turn)/Math.log(Math.E));
+        deposit+= (long) (deposit*temp);
     }
+
     public Region getTop(){return top;}
     public Region getDown(){return down;}
     public Region getDownLeft(){return downLeft;}

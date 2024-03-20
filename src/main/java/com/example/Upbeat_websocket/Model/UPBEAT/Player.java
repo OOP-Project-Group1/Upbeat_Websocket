@@ -18,7 +18,8 @@ public class Player {
     public static int turn;
     @Setter
     public boolean myTurn = false;
-
+    @Setter
+    public static int interestPct;
     public static Player[] instance = new Player[4];
     public static Player[] getInstance(){
         if(instance[0]==null){
@@ -40,8 +41,29 @@ public class Player {
     Region[][] territories;
     Path constructionPlan;
     Region location;
+    int countTurn = 0;
     public Player(String name){
         this.name = name;
+    }
+    /**
+     * First each region that belong to this player get interest
+     * and then player has time to revise plan
+     * after that construction plan start
+     */
+    public void turn(){
+        if(myTurn){
+            countTurn+=1;
+            for(Region[] row : territories){
+                for(Region t : row){
+                    if(t!=null){
+                        t.accruesInterest(interestPct,countTurn);
+                    }
+                }
+            }
+        }
+    }
+    public void goBack(){
+        location = center;
     }
     public void loseGame(){
         center = null;
