@@ -113,10 +113,14 @@ public class Region {
     }
 
     void accruesInterest(long interest,int turn){
-        double temp=interest*Math.log(deposit)*(Math.log(turn)/Math.log(Math.E));
+        System.out.println("Turn" + turn);
+        double temp= interest / 100.0 * customLog(10, deposit) * (Math.log(turn*1.0));
+        System.out.println("trmp" + temp);
         deposit+= (long) (deposit*temp);
     }
-
+    private static double customLog(double base, double logNumber) {
+        return Math.log(logNumber) / Math.log(base);
+    }
     public Region getTop(){return top;}
     public Region getDown(){return down;}
     public Region getDownLeft(){return downLeft;}

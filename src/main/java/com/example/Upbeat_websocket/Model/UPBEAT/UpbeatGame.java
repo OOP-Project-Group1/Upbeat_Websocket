@@ -28,8 +28,6 @@ public class UpbeatGame {
     long interestPct;
     private Player[] players;
     public Region[][] map;
-    private int turn;
-    private Player firstPlayer;
     public UpbeatGame(Path file , Player[] players){
         setup(file,players);
     }
